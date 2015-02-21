@@ -6,6 +6,7 @@ import requests
 from tabulate import tabulate
 from bs4 import BeautifulSoup
 from werkzeug.urls import url_quote_plus
+from collections import OrderedDict
 
 
 @click.command()
@@ -39,14 +40,15 @@ def main(query, checkin, checkout, guests):
         summary_div = div.find('div', {'class': 'listing-location'})
         instant_span = div.find('span', {'class': 'h3 icon-beach'})
 
-        listings.append({
-            'name': div.attrs.get('data-name'),
-            'lat': div.attrs.get('data-lat'),
-            'lng': div.attrs.get('data-lng'),
-            'price': float(price_span.text),
-            'summary': summary_div.text,
-            'instant': bool(instant_span),
-        })
+        listing = OrderedDict([
+            ('price', float(price_span.text)),
+            ('name', div.attrs.get('data-name')),
+            ('instant', bool(instant_span)),
+            ('lat', div.attrs.get('data-lat')),
+            ('lng', div.attrs.get('data-lng')),
+            ('summary', summary_div.text),
+        ])
+        listings.append(listing)
 
     listings = sorted(listings, key=lambda k: k['price']) 
 
