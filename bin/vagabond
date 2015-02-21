@@ -40,6 +40,7 @@ def main(query, checkin, checkout, guests):
             'lat': div.attrs.get('data-lat'),
             'lng': div.attrs.get('data-lng'),
             'price': int(div.find('span', {'class': 'price-amount'}).text),
+            'summary': div.find('div', {'class': 'listing-location'}).text,
         }
         listings.append(listing)
 
