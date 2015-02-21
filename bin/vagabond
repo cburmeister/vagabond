@@ -35,14 +35,18 @@ def main(query, checkin, checkout, guests):
     listings = []
 
     for div in soup.find_all('div', {'class': 'listing'}):
-        listing = {
+        price_span = div.find('span', {'class': 'price-amount'})
+        summary_div = div.find('div', {'class': 'listing-location'})
+        instant_span = div.find('span', {'class': 'h3 icon-beach'})
+
+        listings.append({
             'name': div.attrs.get('data-name'),
             'lat': div.attrs.get('data-lat'),
             'lng': div.attrs.get('data-lng'),
-            'price': int(div.find('span', {'class': 'price-amount'}).text),
-            'summary': div.find('div', {'class': 'listing-location'}).text,
-        }
-        listings.append(listing)
+            'price': float(price_span.text),
+            'summary': summary_div.text,
+            'instant': bool(instant_span),
+        })
 
     listings = sorted(listings, key=lambda k: k['price']) 
 
