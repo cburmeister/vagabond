@@ -1,0 +1,52 @@
+#! /usr/bin/env python
+
+import sys
+import click
+import requests
+from tabulate import tabulate
+from bs4 import BeautifulSoup
+from werkzeug.urls import url_quote_plus
+
+
+@click.command()
+@click.option('--query', default='', help='Where do you want to go.')
+@click.option('--checkin', default='', help='Date of arrival.')
+@click.option('--checkout', default='', help='Date of departure.')
+@click.option('--guests', default='', help='Number of guests.')
+def main(query, checkin, checkout, guests):
+    """
+    Search https://www.airbnb.com/ without leaving the prompt.
+    """
+    args = {
+        'checkin': checkin,
+        'checkout': checkout,
+        'guests': guests,
+    }
+    params = '&'.join([
+        '%s=%s' % (k, url_quote_plus(v)) for k, v in args.items()
+    ])
+    url = '%s?%s' % ('https://www.airbnb.com/s/%s' % query, params)
+
+    click.echo('Querying: %s\n' % url)
+
+    r = requests.get(url)
+    soup = BeautifulSoup(r.content)
+
+    listings = []
+
+    for div in soup.find_all('div', {'class': 'listing'}):
+        listing = {
+            'name': div.attrs.get('data-name'),
+            'lat': div.attrs.get('data-lat'),
+            'lng': div.attrs.get('data-lng'),
+            'price': int(div.find('span', {'class': 'price-amount'}).text),
+        }
+        listings.append(listing)
+
+    listings = sorted(listings, key=lambda k: k['price']) 
+
+    click.echo(tabulate(listings, headers='keys'))
+
+
+if __name__ == "__main__":
+   main()
