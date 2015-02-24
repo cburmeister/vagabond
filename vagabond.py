@@ -3,7 +3,6 @@
 import json
 import click
 import requests
-from tabulate import tabulate
 from bs4 import BeautifulSoup
 from werkzeug.urls import url_quote_plus
 from collections import OrderedDict
