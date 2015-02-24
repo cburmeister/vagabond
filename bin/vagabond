@@ -39,6 +39,7 @@ def main(query, checkin, checkout, guests):
         instant_span = div.find('span', {'class': 'h3 icon-beach'})
 
         listing = OrderedDict([
+            ('url', div.attrs.get('data-url')),
             ('price', float(price_span.text)),
             ('name', div.attrs.get('data-name')),
             ('instant', bool(instant_span)),
