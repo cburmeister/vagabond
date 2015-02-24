@@ -1,3 +1,5 @@
+![vagabond](https://raw.githubusercontent.com/cburmeister/vagabond/master/image.jpg)
+
 vagabond
 ===========
 
