@@ -51,7 +51,8 @@ def main(query, checkin, checkout, guests):
 
     listings = sorted(listings, key=lambda k: k['price']) 
 
-    click.echo(json.dumps(listings))
+    click.echo(json.dumps(listings, indent=4, sort_keys=True))
+
 
 
 if __name__ == "__main__":
