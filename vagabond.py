@@ -14,9 +14,7 @@ from collections import OrderedDict
 @click.option('--checkout', default='', help='Date of departure.')
 @click.option('--guests', default='', help='Number of guests.')
 def main(query, checkin, checkout, guests):
-    """
-    Search https://www.airbnb.com/ without leaving the prompt.
-    """
+    """Search https://www.airbnb.com/ without leaving the prompt."""
     args = {
         'checkin': checkin,
         'checkout': checkout,
@@ -48,11 +46,17 @@ def main(query, checkin, checkout, guests):
         ])
         listings.append(listing)
 
-    listings = sorted(listings, key=lambda k: k['price']) 
+    listings = sorted(listings, key=lambda k: k['price'])
 
-    click.echo(json.dumps(listings, indent=4, sort_keys=True))
-
+    click.echo(
+        json.dumps(
+            listings,
+            indent=4,
+            ensure_ascii=True,
+            sort_keys=True
+        )
+    )
 
 
 if __name__ == "__main__":
-   main()
+    main()
